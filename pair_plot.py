@@ -17,12 +17,15 @@ def pair_plot(df):
     for column in df_num.columns:
         df_num[column] = ut.normalize_column(df_num[column])
     # print("df_num normalized:\n", df_num)
-    fig, axs = plt.subplots(df_num.shape[1], df_num.shape[1], figsize=(6, 2))
+    fig, axs = plt.subplots(df_num.shape[1], df_num.shape[1], figsize=(90, 90))
+    axs = axs.ravel()
     print(type(axs), type(axs[0]))
     for column1 in df_num.columns:
         for column2 in df_num.columns:
             if column1 == column2:
                 histogram(axs[int(df_num.columns.get_loc(column1))], column1)
+
+    plt.show()
 
 
 if __name__ == "__main__":
