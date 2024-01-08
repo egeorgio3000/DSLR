@@ -24,7 +24,7 @@ def histogram(df):
     for column in [col for col in df.columns if col != 'Hogwarts House']:
         plt.hist(df[df['Hogwarts House'] == 'Slytherin'][column], alpha=0.5, label='Slytherin', color='green')
         plt.hist(df[df['Hogwarts House'] == 'Gryffindor'][column], alpha=0.5, label='Gryffindor', color='red')
-        plt.hist(df[df['Hogwarts House'] == 'Hufflepuff'][column], alpha=0.5, label='Gryffindor', color='yellow')
+        plt.hist(df[df['Hogwarts House'] == 'Hufflepuff'][column], alpha=0.5, label='Hufflepuff', color='yellow')
         plt.hist(df[df['Hogwarts House'] == 'Ravenclaw'][column], alpha=0.5, label='Ravenclaw', color='blue')
         plt.xlabel(column)
         plt.ylabel('Frequency')
