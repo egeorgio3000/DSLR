@@ -5,28 +5,25 @@ from utils.utils import Utils as ut
 import argparse
 
 def histogram(ax, column, df):
-    ax.hist(df[df['Hogwarts House'] == 'Slytherin'][column], alpha=0.5, color='green')
-    ax.hist(df[df['Hogwarts House'] == 'Gryffindor'][column], alpha=0.5, color='red')
-    ax.hist(df[df['Hogwarts House'] == 'Hufflepuff'][column], alpha=0.5, color='yellow')
-    ax.hist(df[df['Hogwarts House'] == 'Ravenclaw'][column], alpha=0.5, color='blue')
+    ax.hist(df[df['Hogwarts House'] == 'Slytherin'][column], bins=20, label='Slytherin', alpha=0.5, color='green')
+    ax.hist(df[df['Hogwarts House'] == 'Gryffindor'][column], bins=20, label='Gryffindor', alpha=0.5, color='red')
+    ax.hist(df[df['Hogwarts House'] == 'Hufflepuff'][column], bins=20, label='Hufflepuff', alpha=0.5, color='yellow')
+    ax.hist(df[df['Hogwarts House'] == 'Ravenclaw'][column], bins=20, label='Ravenclaw', alpha=0.5, color='blue')
+    ax.set_xticks([])
+    ax.set_yticks([])
 
 def scatter_plot(ax, column1, column2, df):
     try:
         
         abs = pd.concat([df[column1], df['Hogwarts House']], axis=1)
         ord = pd.concat([df[column2], df['Hogwarts House']], axis=1)
-        # print(abs)
-        
-
     except Exception as e:
         print('Error: ', e)
         # sys.exit(1)
     for subj in [('Slytherin', 'green'), ('Gryffindor', 'red'), ('Ravenclaw', 'blue'), ('Hufflepuff', 'yellow')]:
-        ax.scatter(abs[abs['Hogwarts House'] == subj[0]][column1], ord[ord['Hogwarts House'] == subj[0]][column2], alpha=0.5, label=subj[0], color=subj[1])
-    # plt.xlabel(s1)
-    # plt.ylabel(s2)
-    # plt.legend()
-    # plt.title(f'Scatter of {s1} and {s2}')
+        ax.scatter(abs[abs['Hogwarts House'] == subj[0]][column1], ord[ord['Hogwarts House'] == subj[0]][column2], alpha=0.5, label=subj[0], color=subj[1], s=1)
+    ax.set_xticks([])
+    ax.set_yticks([])
 
 def pair_plot(df):
     df_num = ut.keep_num_values(df)
@@ -38,14 +35,19 @@ def pair_plot(df):
     except ValueError:
         print(f'{ValueError}: No Feature available in dataframe')
         exit(1)
-    fig, axs = plt.subplots(df_num.shape[1], df_num.shape[1], figsize=(30, 30))
-    for column1 in [col for col in df_num.columns if col != 'Hogwarts House']:
-        for column2 in [col for col in df_num.columns if col != 'Hogwarts House']:
+    fig, axs = plt.subplots(df_num.shape[1] - 1, df_num.shape[1] - 1, figsize=(13, 13), tight_layout=True)
+    for i, column1 in enumerate([col for col in df_num.columns if col != 'Hogwarts House']):
+        for j, column2 in enumerate([col for col in df_num.columns if col != 'Hogwarts House']):
             if column1 == column2:
                 histogram(axs[int(df_num.columns.get_loc(column1))][int(df_num.columns.get_loc(column1))], column1, df_num)
             else:
                 scatter_plot(axs[int(df_num.columns.get_loc(column1))][int(df_num.columns.get_loc(column2))], column1, column2, df_num)
-
+            if i == df_num.shape[1] - 2:
+                axs[i, j].set_xlabel(column2)
+            if j == 0:
+                axs[i, j].set_ylabel(column1)
+    plt.legend(df['Hogwarts House'].unique(), loc='center left',
+            frameon=False, bbox_to_anchor=(1, 0.5))
     plt.show()
 
 
