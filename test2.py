@@ -2,12 +2,32 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from utils.utils import Utils as ut
+from typing import List
+import random
 
+#https://covid19.uthm.edu.my/wp-content/uploads/2020/04/Data-Science-from-Scratch-First-Principles-with-Python-by-Joel-Grus-z-lib.org_.epub_.pdf
 def logistic(x: float) -> float:
     return 1.0 / (1 + np.exp(-x))
+
 def logistic_d(x: float) -> float:
     y = logistic(x)
     return y * (1 - y)
+
+def  _negative_log_likelihood(x, y, beta) -> float:
+    if y == 'Gryffindor':
+        return -np.log(logistic(np.dot(x, beta)))
+    else:
+        return -np.log(1 - logistic(np.dot(x, beta)))
+
+def negative_log_likelihood(xs,
+                            ys,
+                            beta) -> float:
+    return sum(_negative_log_likelihood(x, y, beta)
+    for x, y in zip(xs, ys))
+
+def J(df):
+    n = df.shape[0]
+    print(n)
 
 if __name__ == '__main__':
     s2 = 'Astronomy'
@@ -24,4 +44,12 @@ if __name__ == '__main__':
     plt.ylabel(s2)
     plt.legend()
     plt.title(f'Scatter of {s1} and {s2}')
+    print(df_test)
+    xs = [[1.0] + row[1:] for row in df_test.values.tolist()]
+    ys = [row[0] for row in df_test.values.tolist()]
+    beta = [random.random() for _ in range(3)]
+    # print(negative_log_likelihood(xs, ys, beta))
+    print(np.dot(xs[0], beta))
     plt.show()
+
+    
