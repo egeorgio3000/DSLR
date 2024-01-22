@@ -4,6 +4,7 @@ import pandas as pd
 from utils.utils import Utils as ut
 from typing import List
 import random
+from utils.linear_algebra import vector_sum, Vector
 
 #https://covid19.uthm.edu.my/wp-content/uploads/2020/04/Data-Science-from-Scratch-First-Principles-with-Python-by-Joel-Grus-z-lib.org_.epub_.pdf
 def logistic(x: float) -> float:
@@ -25,9 +26,15 @@ def negative_log_likelihood(xs,
     return sum(_negative_log_likelihood(x, y, beta)
     for x, y in zip(xs, ys))
 
-def J(df):
-    n = df.shape[0]
-    print(n)
+def _negative_log_partial_j(x: Vector, y: float, beta: Vector, j: int):
+    -(y - logistic(np.dot(x, beta))) * x[j]
+
+def _negative_log_gradient(x: Vector, y: float, beta: Vector):
+    return [_negative_log_partial_j(x, y, beta, j) for j in range(len(beta))]
+
+# def J(df):
+#     n = df.shape[0]
+#     print(n)
 
 if __name__ == '__main__':
     s2 = 'Astronomy'
