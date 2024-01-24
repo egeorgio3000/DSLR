@@ -15,13 +15,23 @@ def logistic_d(x: float) -> float:
 def partial_gradient_descent(theta, x, y, j):
         return - (y - logistic(np.dot(x, theta))) * x[j]
 
+def J(X, y, theta):
+    m = len(y)
+    sum = 0
+    for i in range(m):
+        if y[i] == 1:
+            sum -= (1 / m) * np.log(logistic(np.dot(X[i], theta)))
+        else:
+            sum -= (1 / m) * np.log(logistic(np.dot(X[i], theta)))
+    return(sum)
+
 def gradient_descent(X, y, theta, learning_rate, iter):
     m = len(y)
     for _ in range(iter):
         h = logistic(np.dot(X, theta))
         gradient = np.dot(X.T, (h - y)) / m
         theta -= learning_rate * gradient
-        # print(theta)
+        print(J(X, y, theta))
     return theta
           
 
@@ -52,6 +62,6 @@ if __name__ == '__main__':
     X = np.c_[np.ones((X.shape[0], 1)), X]
     theta = np.zeros(X.shape[1])
     y = df_test['Hogwarts House'].map({'Gryffindor': 0, 'Hufflepuff': 1}).values
-    theta = gradient_descent(X, y, theta, 0.1, 400)
+    theta = gradient_descent(X, y, theta, 0.05, 600)
     print(theta, df_test)
     plt.show()
